@@ -1,0 +1,22 @@
+#! /usr/bin/env sh
+
+# hard-coded because idc
+conf=~/.config/fuzzel/fuzzel.ini
+
+if test -z "$1"; then
+	theme="current-scheme"
+else 
+	theme="$1"
+fi
+
+echo "Using theme: $theme"
+
+# Get all colours. They're not all used in this script, but we'll get them anyways so we don't have to rewrite
+read -d "\n" C0 C1 C2 C3 C4 C5 C6 C7 C8 C9 C10 C11 C12 C13 C14 C15 <<< $(cat ~/.config/wal/colorschemes/dark/$theme.json | grep color | grep \$ | awk '{print $2}' | cut -c 3-8)
+
+# HORRIFIC line of code, ne?
+new_conf="$(cat ~/.config/fuzzel/fuzzel.ini | head --lines=-3)"
+new_conf+="\nbackground=${C0}ff"
+new_conf+="\nselection=${C1}ff"
+new_conf+="\ntext=${C7}ff"
+echo -e "$new_conf" > $conf

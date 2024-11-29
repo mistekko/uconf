@@ -1,0 +1,7 @@
+#! /usr/bin/env sh
+
+dwl -s dwlb &
+someblocks -p | dwlb -status-stdin all &
+sleep 0.5
+newlook "$(find ~/pictures/wallpaper | shuf -n 1)"
+

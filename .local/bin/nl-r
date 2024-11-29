@@ -1,0 +1,3 @@
+#! /usr/bin/env sh
+
+newlook "$(realpath "$(find ~/pictures/*allpaper | shuf -n 1)")"

@@ -1,0 +1,15 @@
+#! /usr/bin/env sh
+
+test="$(file "$1")"
+if ! [ "$?" = "0" ]; then
+    >&2 echo "Failed to detect valid file"
+    exit
+fi
+
+WALL="$(realpath "$1")"
+
+swaybg -i "$WALL" -m fit &
+wal -i "$WALL" -p current-scheme
+ACST-fuzzel-and-dwlb
+pywalfox update
+
