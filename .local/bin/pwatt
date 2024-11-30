@@ -1,0 +1,1 @@
+echo $(upower -i $(upower -e | awk "NR==2") | grep energy-rate | awk "{print \$2}" | cut -d '.' -f 1) W
