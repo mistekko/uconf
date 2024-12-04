@@ -28,7 +28,7 @@ text="$C7"
 #       //         //  //
 #   ///// ||//|// //  /////
 #  /////  ||/||/ /// /////
-echo "Setting first backgroundSet to $base..."
+echo "Setting first background set to $base..."
 for background in "inactive-bg" "middle-bg" "occupied-bg"; do
 	echo "    $background...";
 	dwlb -set-$background $base
