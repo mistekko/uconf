@@ -1,7 +1,9 @@
 #! /usr/bin/env sh
 
 dwl -s dwlb &
+foot --server &
+pkill someblocks &&
 someblocks -p | dwlb -status-stdin all &
-sleep 0.5
-newlook "$(find ~/pictures/wallpaper | shuf -n 1)"
+sleep 1
+newlook "$(find ~/Pictures/Wallpaper -type f | shuf -n 1)"
 
