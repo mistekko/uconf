@@ -1,0 +1,6 @@
+#! /usr/bin/env sh
+
+recentest="$HOME/Pictures/Wallpaper/used/$(ls -t "$HOME/Pictures/Wallpaper/used" | head -n 1)"
+
+echo "Copying file: $recentest"
+cp "$recentest" "$HOME/Pictures/Wallpaper/perfect from pywal/"

@@ -1,0 +1,10 @@
+#! /usr/bin/env sh
+
+recentest="$(ls -t "$HOME/Pictures/Wallpaper/used" | head -n 1)"
+file1="$(find $HOME/Pictures/Wallpaper/ -iname "$recentest" | grep -v used)"
+file2="$(find $HOME/Pictures/Wallpaper/ -iname "$recentest" | grep used)"
+for file in "$file1" "$file2"; do
+	echo "Removing file: $file"
+	rm "$file" 
+done
+
