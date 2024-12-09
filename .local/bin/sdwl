@@ -2,7 +2,7 @@
 
 dwl -s dwlb &
 foot --server &
-pkill someblocks &&
+pkill someblocks
 someblocks -p | dwlb -status-stdin all &
 sleep 1
 newlook "$(find ~/Pictures/Wallpaper -type f | shuf -n 1)"
