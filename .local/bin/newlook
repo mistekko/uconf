@@ -25,4 +25,5 @@ echo "applying colour scheme to fuzzel, dwlb, and librefox"
 ACST-fuzzel-and-dwlb > /dev/null
 pywalfox update
 
+touch -m "$WALL"
 cp "$WALL" ~/*ictures/*allpaper/used
