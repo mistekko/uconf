@@ -1,3 +1,10 @@
+;; Table of contents:
+;; 15   Basic settings
+;; 107  Language-specific settinsg
+;; 148  Package configuration
+;; 245  Personal functions
+;; 341  Key-mapping
+
 (setq debug-on-error t)
 ;; Let's make a macro to debug our init file so we can use it later:
 (defmacro print-debug (string-to-print)
@@ -41,7 +48,7 @@
  '(ispell-dictionary "british")
  '(menu-bar-mode nil)
  '(package-selected-packages
-   '(theme-magic qml-mode sublime-themes soothe-theme yaml-mode tree-sitter everlasting-scratch org-bullets catppuccin-theme moe-theme almost-mono-themes occidental-theme afternoon-theme abyss-theme alect-themes contrast-color blackboard-theme dashboard ef-themes smex xelb package+ markdown-mode multiple-cursors ## cmake-mode))
+   '(olivetti theme-magic qml-mode sublime-themes soothe-theme yaml-mode tree-sitter everlasting-scratch org-bullets catppuccin-theme moe-theme almost-mono-themes occidental-theme afternoon-theme abyss-theme contrast-color blackboard-theme dashboard ef-themes smex xelb package+ markdown-mode multiple-cursors ## cmake-mode))
  '(ring-bell-function 'ignore)
  '(scroll-bar-mode nil)
  '(tool-bar-mode nil)
@@ -118,6 +125,22 @@
 
 (add-hook 'markdown-mode-hook 'prettify-symbols-mode)
 (add-hook 'markdown-mode-hook 'm/markdown-mode)
+
+(setq inferior-lisp-program "/usr/bin/sbcl --noinform")
+
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:background nil))))
+ '(markdown-header-face-1 ((t (:inherit markdown-header-face :height 2.0))))
+ '(markdown-header-face-2 ((t (:inherit markdown-header-face :height 1.7))))
+ '(markdown-header-face-3 ((t (:inherit markdown-header-face :height 1.4))))
+ '(markdown-header-face-4 ((t (:inherit markdown-header-face :height 1.1))))
+ '(markdown-inline-code-face ((t (:inherit font-lock-constant-face :background "gainsboro"))))
+ '(markdown-link-face ((t (:inherit link))))
+ '(markdown-pre-face ((t (:inherit font-lock-constant-face :background "gainsboro")))))
 
 
 ;; -----------------------------------------------------------------------------
@@ -241,17 +264,6 @@
   "Switches to other window and then deletes all inactive windows"
   (other-window 1)
   (delete-other-windows))
-      
-;; window switching
-(setq m/switching-direction 1)
-(defun m/other-window-binary ()
-  "Switches to previous selected window. This is very different from 
-  `previous-window`, which sequentially and monotonically selects windows
-  from the list of windows."
-  (interactive)
-  (other-window m/switching-direction)
-  (setq
-   m/switching-direction (- m/switching-direction (* m/switching-direction 2))))
 
 ;; org-forward-sentence isn't very helpful
 (defun forward-clause ()
@@ -326,52 +338,38 @@
 (global-set-key (kbd "C-S-<down>") 'scroll-up-lines)
 (global-set-key (kbd "C-S-<up>") 'scroll-down-lines)
 ;; frame/window management
-(global-set-key (kbd "s-m") 'm/toggle-frame-margins)
-(global-set-key (kbd "s-w") 'm/toggle-frame-wide-mode)
-(global-set-key (kbd "s-<tab>") 'm/other-window-binary)
+(global-set-key (kbd "s-M") 'm/toggle-frame-margins)
 (global-set-key (kbd "C-<tab>") 'm/promote-other-window)
-  ;; this really needs some error handlin
+;; this really needs some error handlin
 (global-set-key (kbd "M-q") 'kill-buffer-and-window)
-
-(global-set-key (kbd "s-l") 'forward-clause)
-(global-set-key (kbd "s-r") 'backward-clause)
 
 (print-debug "Remapping backspace and help...")
 ;; keymaps for using 'h' for backwards character removal shortcuts
 ;; and 'z' for h's old duties
 ;; warning: WARNING
 (global-unset-key (kbd "C-z"))
-
-;; map backspace (help) to C-Z
 (define-key key-translation-map [?\C-z] [?\C-h])
-
-;; map (mark-paragraph) to M-n
 (define-key key-translation-map [?\M-n] [?\M-h])
-
-;; map (backwards-delete-char) to C-h
 (define-key key-translation-map [?\C-h] [?\C-?])
-
-;; map (backwards-kill-word) to M-h
 (define-key key-translation-map [?\M-h] [?\M-\d])
 
 ;; org-mode maps
 (global-set-key (kbd "C-c l") #'org-store-link)
 (global-set-key (kbd "C-c a") #'org-agenda)
 (global-set-key (kbd "C-c c") #'org-capture)
+(global-set-key (kbd "s-l") 'forward-clause)
+(global-set-key (kbd "s-r") 'backward-clause)
+
 (with-eval-after-load "org"
   (define-key org-mode-map (kbd "C-%") #'m/insert-checkbox-cookie))
 
-;; (define-key 'org-mode-map (kbd "C-%") 'm/insert-checkbox-cookie)
-
-
 ;; multiple-cursors maps
-(global-set-key (kbd "s->") 'mc/mark-next-like-this)
-(global-set-key (kbd "s-<") 'mc/mark-previous-like-this)
-(global-set-key (kbd "C-c s->") 'mc/mark-all-like-this)
+(global-set-key (kbd "s-}") 'mc/mark-next-like-this)
+(global-set-key (kbd "s-{") 'mc/mark-previous-like-this)
+(global-set-key (kbd "s-+") 'mc/mark-all-like-this)
 
 ;; code folding. No tree sitter :(
 (global-set-key (kbd "s-n") 'hs-toggle-hiding)
-
 
 ;; misc maps 9mm)
 (global-set-key (kbd "M-x") 'smex)
@@ -380,34 +378,12 @@
 (global-set-key (kbd "C-. C-.") 'hlt-unhighlight-region)
 (global-set-key (kbd "C-. >") 'hlt-next-face)
 (global-set-key (kbd "C-. <") 'hlt-previous-face)
-
-
 (global-set-key (kbd "<muhenkan>") (lambda () (interactive) (other-window -1)))
 (global-set-key (kbd "<henkan>") (lambda () (interactive) (other-window 1)))
-
-
-(commandp (lambda () 'other-window -1))
-(commandp 'smex)
-
-(lambda () (other-window -1))
-		
-(global-set-key (kbd "<henkan>") 'delete-other-windows)
+(global-set-key (kbd "<hiragana-katakana>") 'delete-other-windows)
 
 (print-debug "--- Finshed mapping mapping keys ---")
 ;; -----------------------------------------------------------------------------
 
 (print-debug "\n----- Fininshed loading init.el. Happy hacking! -----")
 
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:background nil))))
- '(markdown-header-face-1 ((t (:inherit markdown-header-face :height 2.0))))
- '(markdown-header-face-2 ((t (:inherit markdown-header-face :height 1.7))))
- '(markdown-header-face-3 ((t (:inherit markdown-header-face :height 1.4))))
- '(markdown-header-face-4 ((t (:inherit markdown-header-face :height 1.1))))
- '(markdown-inline-code-face ((t (:inherit font-lock-constant-face :background "gainsboro"))))
- '(markdown-link-face ((t (:inherit link))))
- '(markdown-pre-face ((t (:inherit font-lock-constant-face :background "gainsboro")))))
