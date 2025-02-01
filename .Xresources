@@ -1,0 +1,6 @@
+URxvt.depth: 32
+URxvt.scrollBar: false
+URxvt.font: xft:Andale Mono:antialias=true:size=13
+URxvt.cursorBlink: true
+URxvt.internalBorder: 15
+URxvt.letterSpace: -2 
