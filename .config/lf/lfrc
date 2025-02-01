@@ -1,0 +1,9 @@
+set ifs "\n"
+map <delete> delete
+set previewer ~/.local/bin/lf-preview
+map i $sxiv $f
+set sixel true
+set incsearch true
+map + %{{ read dir; mkdir $dir }}
+map ZQ quit
+map ZZ quit
