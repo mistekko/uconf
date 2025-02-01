@@ -1,1 +1,0 @@
-grim -g "$(slurp)" "$HOME/$(date "+%H:%M:%S %d-%m-%y.png")"

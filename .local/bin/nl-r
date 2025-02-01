@@ -1,5 +1,0 @@
-#! /usr/bin/env sh
-
-wall="$(find $HOME/*ictures/*allpaper -type f | shuf -n 1)"
-echo "using file: $wall"
-newlook "$(realpath "$wall")"
