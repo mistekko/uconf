@@ -1,0 +1,64 @@
+#! /usr/bin/env sh
+
+# NOTE: use "wal -i <wallpaper> -qnste" to generate a base-theme to modify
+# according to your tastes
+# necessary todo: for any command which requires an argument, prompt the user to submit one via dmenu upon ommission 
+
+. "$HOME/.cache/wal/colors.sh"
+dmenu_cmd="dmenu -nb $color0 -nf $color15 -sb $color1 -sf $color15"
+theme_dir="$HOME/.local/share/wal-themes"
+usage_message="
+Usage:
+	nl  			choose a theme using dmenu
+	nl l			list all themes
+	nl a [theme-name]	apply named theme
+	nl n [theme-name]       create named theme from current pywal cache
+	nl e [theme-name]       open colours for named theme in neovim
+	nl d [theme-name]       delete named theme"
+command="$1"
+pick_theme () {
+	theme="$(ls "$theme_dir" | $dmenu_cmd)"
+	if [ -n "$theme" ]; then
+		nl "$command" "$theme"
+	else 
+		exit 1
+	fi
+}
+
+if [ -z "$command" ]; then
+	command="a"
+	pick_theme 
+
+elif [ "$command" = "l" ]; then
+	ls "$theme_dir"
+
+elif [ -z "$2" ]; then
+	pick_theme
+
+elif [ "$1" = "n" ]; then
+	# extracts filename from JSON 
+	wallpaper="$(grep wallpaper $HOME/.cache/wal/colors.json | cut -c 19- | sed s/..$//g)"
+	colours="$HOME/.cache/wal/colors.json"
+	mkdir -p "$theme_dir/$2"
+	cp "$wallpaper" "$theme_dir/$2/wallpaper"
+	cp "$colours" "$theme_dir/$2/colours.json"
+
+elif [  ! -d "$theme_dir/$2" ]; then
+	echo -e "'$2' does not appear to be a valid theme.\n\t$usage_message" >&2
+
+elif [ "$1" = "a" ]; then
+	prefix="$theme_dir/$2"
+	xwallpaper --zoom "$prefix/wallpaper"
+	xrdb ~/.cache/wal/colors.Xresources
+	xrdb ~/.Xresources
+	wal -f "$prefix/colours.json" -i "$prefix/wallpaper"
+	pywalfox update
+	echo "Done"
+
+elif [ "$1" = "e" ]; then
+	nvim "$theme_dir/$2/colours.json"
+
+elif [ "$1" = "d" ]; then
+	rm -r "$theme_dir/$2"
+fi
+
